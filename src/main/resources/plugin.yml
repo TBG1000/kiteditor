@@ -1,0 +1,4 @@
+name: KitEditor
+version: 1.0.0
+main: rip.bolt.kiteditor.KitEditorPlugin
+depend: [PGM]
