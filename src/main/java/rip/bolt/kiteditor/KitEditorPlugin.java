@@ -31,10 +31,11 @@ import tc.oc.pgm.api.party.Competitor;
 import tc.oc.pgm.api.player.MatchPlayer;
 import tc.oc.pgm.api.player.event.ObserverInteractEvent;
 import tc.oc.pgm.kits.ApplyItemKitEvent;
-import tc.oc.pgm.kits.KitMatchModule;
 import tc.oc.pgm.kits.Slot;
 import tc.oc.pgm.lib.net.kyori.adventure.text.Component;
 import tc.oc.pgm.lib.net.kyori.adventure.text.format.NamedTextColor;
+import tc.oc.pgm.spawns.Spawn;
+import tc.oc.pgm.spawns.SpawnMatchModule;
 import tc.oc.pgm.spawns.events.ObserverKitApplyEvent;
 
 public class KitEditorPlugin extends JavaPlugin implements Listener {
@@ -85,7 +86,12 @@ public class KitEditorPlugin extends JavaPlugin implements Listener {
         player.getBukkit().setAllowFlight(true);
         player.getBukkit().setFlying(true);
 
-        event.getMatch().needModule(KitMatchModule.class).getModule().getKits().forEach(kit -> kit.apply(player, true, new ArrayList<>()));
+        for (Spawn spawn : event.getMatch().needModule(SpawnMatchModule.class).getSpawns()) {
+            if (!spawn.allows(player) || !spawn.getKit().isPresent())
+                continue;
+
+            spawn.getKit().get().apply(player, true, new ArrayList<ItemStack>());
+        }
 
         player.getInventory().setArmorContents(new ItemStack[] { null, null, null, null });
 
