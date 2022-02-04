@@ -29,6 +29,7 @@ import tc.oc.pgm.api.PGM;
 import tc.oc.pgm.api.match.event.MatchFinishEvent;
 import tc.oc.pgm.api.party.Competitor;
 import tc.oc.pgm.api.player.MatchPlayer;
+import tc.oc.pgm.api.player.event.MatchPlayerAddEvent;
 import tc.oc.pgm.api.player.event.ObserverInteractEvent;
 import tc.oc.pgm.kits.ApplyItemKitEvent;
 import tc.oc.pgm.kits.Slot;
@@ -57,9 +58,9 @@ public class KitEditorPlugin extends JavaPlugin implements Listener {
         System.out.println("[KitEditor] KitEditor is enabled!");
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onObserverKit(ObserverKitApplyEvent event) {
-        if (!(event.getPlayer().getParty() instanceof Competitor) || event.getPlayer().getMatch().isFinished())
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onObserverKit(MatchPlayerAddEvent event) {
+        if (!(event.getInitialParty() instanceof Competitor) || event.getPlayer().getMatch().isFinished())
             return;
 
         Inventory inventory = event.getPlayer().getInventory();
